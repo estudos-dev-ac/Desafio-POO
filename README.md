@@ -28,9 +28,6 @@ A solução deverá:
 - **Herança:** reutilize as características comuns nos diferentes tipos de conta.
 - **Polimorfismo:** permita que a mesma operação tenha comportamentos diferentes conforme o tipo da conta.
 
-## Entrega
-
-Entregue uma solução executável contendo todos os requisitos do desafio. As decisões de modelagem e organização fazem parte da avaliação.
 
 ## Avaliação
 
