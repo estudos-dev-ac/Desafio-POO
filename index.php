@@ -10,17 +10,13 @@ abstract class ContaBancaria
         }
     }
 
-    public function verDados(): array
+    public function mostrarSaldo(): float
     {
-        return [
-            "titular" => $this->titular,
-            "saldo" => $this->saldo,
-
-        ];
-    }
-
-    public function mostrarSaldo(): float {
         return $this->saldo;
+    }
+    public function mostrarTitular(): string
+    {
+        return $this->titular;
     }
     private function adicionarSaldo(float $valor): void
     {
@@ -40,12 +36,30 @@ abstract class ContaBancaria
             return "Saldo adicionado com sucesso";
         }
     }
+
+    public function exibirDadosDaConta(): void
+    {
+        echo "======================<br>";
+        echo "Titular: " . $this->mostrarTitular() . "<br>";
+        echo "Saldo R$: " . number_format($this->mostrarSaldo(), 2, ",", ".") . "<br>";
+        echo "Tipo de conta: " . $this->tipoConta() . "<br>";
+        echo "======================<br> <br>";
+    }
+
+
     abstract function sacar(float $valor): string;
+    abstract function tipoConta(): string;
 }
 
 
 class ContaCorrente extends ContaBancaria
 {
+
+
+    public function tipoConta(): string
+    {
+        return "Corrente";
+    }
     public function __construct(string $titular, float $saldo, protected bool $acesso = false)
     {
         parent::__construct($titular, $saldo);
@@ -72,8 +86,13 @@ class ContaCorrente extends ContaBancaria
     }
 }
 
-class ContaSalario extends ContaBancaria
+class ContaPoupanca extends ContaBancaria
 {
+
+    public function tipoConta(): string
+    {
+        return "Poupança";
+    }
     public function sacar(float $valor): string
     {
         if ($valor > $this->mostrarSaldo()) {
@@ -89,4 +108,8 @@ class ContaSalario extends ContaBancaria
     }
 }
 
-$contaSilva = new ContaCorrente("Kauã Silva da Fonseca", 1100);
+$contaSilva = new ContaCorrente("Kauã", 600);
+$contaJoao = new ContaPoupanca("João", 1000);
+
+$contaSilva->exibirDadosDaConta();
+$contaJoao->exibirDadosDaConta();
