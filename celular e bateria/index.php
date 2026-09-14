@@ -32,7 +32,7 @@ class Bateria
 
 class Celular
 {
-    protected Bateria $bateria;
+    public Bateria $bateria;
     protected string $marca;
 
     public function __construct(string $marca, int $carga)
@@ -55,7 +55,9 @@ class Celular
             return text("Celular descarregado de tanto você ir no sapatinho do GTA VI");
         }
     }
-
+    public function getBateriaAtual() : string {
+        return text($this->bateria->carga . "%");
+    }
     public function colocarNoCarregador(): string
     {
         if ($this->bateria->getCarga() < 100) {
@@ -71,16 +73,7 @@ $samsung = new Celular("Samsung", 100);
 echo $samsung->verInformacoes();
 echo $samsung->jogarJogo();
 echo $samsung->jogarJogo();
-echo $samsung->jogarJogo();
-echo $samsung->jogarJogo();
-echo $samsung->jogarJogo();
-echo $samsung->jogarJogo();
-echo $samsung->jogarJogo();
-echo $samsung->jogarJogo();
-echo $samsung->jogarJogo();
-echo $samsung->jogarJogo();
-echo $samsung->colocarNoCarregador();
-echo $samsung->colocarNoCarregador();
+echo $samsung->getBateriaAtual()
 ?>
 
 
