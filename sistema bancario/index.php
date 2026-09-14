@@ -3,30 +3,29 @@
 declare(strict_types=1);
 abstract class ContaBancaria
 {
-    public function __construct(private string $titular, private float $saldo)
-    {
+    public function __construct(private string $titular, private float $saldo) {
         if ($this->saldo < 0) {
             $this->saldo = 0;
         }
     }
 
-    public function mostrarSaldo(): float
-    {
+    public function mostrarSaldo(): float {
         return $this->saldo;
     }
-    public function mostrarTitular(): string
-    {
+
+    public function mostrarTitular(): string {
         return $this->titular;
     }
-    private function adicionarSaldo(float $valor): void
-    {
+
+    private function adicionarSaldo(float $valor): void {
         $this->saldo += $valor;
     }
 
-    protected function removerSaldo(float $valor): void
-    {
+    protected function removerSaldo(float $valor): void {
         $this->saldo -= $valor;
     }
+
+    
     public function depositar(float $valor): string
     {
         if ($valor <= 0) {
