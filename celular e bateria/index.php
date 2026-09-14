@@ -73,7 +73,7 @@ $samsung = new Celular("Samsung", 100);
 echo $samsung->verInformacoes();
 echo $samsung->jogarJogo();
 echo $samsung->jogarJogo();
-echo $samsung->getBateriaAtual()
+echo $samsung->getBateriaAtual();
 ?>
 
 
