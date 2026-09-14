@@ -56,13 +56,14 @@ class Celular
         }
     }
 
-    public function colocarNoCarregador(): string {
-        if($this->bateria->getCarga() < 100){
-            $this->bateria->carregarBateria();              return text("Bateria carregada com sucesso!");
-        }else{
+    public function colocarNoCarregador(): string
+    {
+        if ($this->bateria->getCarga() < 100) {
+            $this->bateria->carregarBateria();
+            return text("Bateria carregada com sucesso!");
+        } else {
             return text("Bateria em 100%");
         }
-       
     }
 }
 

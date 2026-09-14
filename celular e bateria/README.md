@@ -1,4 +1,3 @@
-
 ## 📱 Desafio 1: Celular e Bateria
 
 ### 💡 A Ideia
