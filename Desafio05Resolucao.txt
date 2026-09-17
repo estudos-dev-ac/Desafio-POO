@@ -1,0 +1,165 @@
+<?php
+
+// Define o comportamento que toda forma de pagamento deve possuir.
+interface MetodoPagamento
+{
+    public function pagar(float $valor): bool;
+}
+
+// Pagamento realizado por Pix.
+class Pix implements MetodoPagamento
+{
+    public function pagar(float $valor): bool
+    {
+        echo "Pagamento de R$ " . number_format($valor, 2, ',', '.') . " realizado via Pix.<br>";
+
+        // Neste exemplo simples, o pagamento sempre será aprovado.
+        return true;
+    }
+}
+
+// Pagamento realizado por cartão de crédito.
+class CartaoCredito implements MetodoPagamento
+{
+    public function pagar(float $valor): bool
+    {
+        echo "Pagamento de R$ " . number_format($valor, 2, ',', '.') . " realizado com Cartão de Crédito.<br>";
+
+        return true;
+    }
+}
+
+// Pagamento realizado por boleto.
+class Boleto implements MetodoPagamento
+{
+    public function pagar(float $valor): bool
+    {
+        echo "Boleto de R$ " . number_format($valor, 2, ',', '.') . " gerado e pago.<br>";
+
+        return true;
+    }
+}
+
+// Define o comportamento que toda forma de notificação deve possuir.
+interface Notificavel
+{
+    public function enviar(Cliente $cliente, string $mensagem): void;
+}
+
+// Envia uma notificação por e-mail.
+class Email implements Notificavel
+{
+    public function enviar(Cliente $cliente, string $mensagem): void
+    {
+        echo "E-mail enviado para {$cliente->getEmail()}: {$mensagem}<br>";
+    }
+}
+
+// Envia uma notificação por WhatsApp.
+class WhatsApp implements Notificavel
+{
+    public function enviar(Cliente $cliente, string $mensagem): void
+    {
+        echo "Mensagem enviada pelo WhatsApp para {$cliente->getNome()}: {$mensagem}<br>";
+    }
+}
+
+class Produto
+{
+    public function __construct(
+        private string $nome,
+        private float $preco
+    ) {
+    }
+
+    public function getNome(): string
+    {
+        return $this->nome;
+    }
+
+    public function getPreco(): float
+    {
+        return $this->preco;
+    }
+}
+
+class Cliente
+{
+    public function __construct(
+        private string $nome,
+        private string $email
+    ) {
+    }
+
+    public function getNome(): string
+    {
+        return $this->nome;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+}
+
+class Pedido {
+       
+    // Esta lista guardará todos os produtos adicionados ao pedido.
+    private array $produtos = [];
+
+    public function __construct(
+        private Cliente $cliente,
+        private MetodoPagamento $metodoPagamento,
+        private Notificavel $notificacao
+    ) {
+    }
+
+    public function adicionarProduto(Produto $produto): void
+    {
+        $this->produtos[] = $produto;
+    }
+
+    public function calcularTotal(): float
+    {
+        $total = 0;
+
+        foreach ($this->produtos as $produto) {
+            $total += $produto->getPreco();
+        }
+
+        return $total;
+    }
+
+    // Permite trocar o pagamento sem alterar a classe Pedido.
+    public function setMetodoPagamento(MetodoPagamento $metodoPagamento): void
+    {
+        $this->metodoPagamento = $metodoPagamento;
+    }
+
+    // Permite trocar a notificação sem alterar a classe Pedido.
+    public function setNotificacao(Notificavel $notificacao): void
+    {
+        $this->notificacao = $notificacao;
+    }
+
+    public function finalizar(): void
+    {
+        $total = $this->calcularTotal();
+
+        // A forma de pagamento escolhida é responsável por processar o valor.
+        $pagamentoAprovado = $this->metodoPagamento->pagar($total);
+
+        if ($pagamentoAprovado) {
+            $mensagem = "Olá, {$this->cliente->getNome()}! Seu pedido foi aprovado. "
+                . "Total: R$ " . number_format($total, 2, ',', '.');
+
+            // A notificação só é enviada quando o pagamento é aprovado.
+            $this->notificacao->enviar($this->cliente, $mensagem);
+        } else {
+            echo "Pagamento não aprovado. O pedido não foi finalizado.<br>";
+        }
+    }
+}
+
+// Exemplo de utilização do sistema.
+$cliente = new Cliente("João", "joao@email.com");
